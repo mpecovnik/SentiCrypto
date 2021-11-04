@@ -42,7 +42,6 @@ class ApiCaller:
     def call(self, url: str, query_params: Dict[str, Any], headers: Dict[str, str]):
 
         response = requests.request("GET", url, headers=headers, params=query_params)
-        print("Endpoint Response Code: " + str(response.status_code))
         if response.status_code != 200:
             raise Exception(response.status_code, response.text)
 
