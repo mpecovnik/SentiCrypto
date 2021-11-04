@@ -16,7 +16,7 @@ class TwitterApiConfig(ApiConfig):
         super_repr_string = super().__repr__()
         return "\n".join(
             [
-                "TWITTER API CONFIG",
+                "Twitter API config",
                 super_repr_string,
                 f"BEARER_TOKEN: {anonymize(self.bearer_token)}",
             ]
@@ -37,10 +37,3 @@ class TwitterApiConfig(ApiConfig):
         return TwitterApiConfig(
             api_key=api_key, api_secret=api_secret, bearer_token=bearer_token
         )
-
-
-config = TwitterApiConfig.from_yaml(
-    "/home/mpecovnik/Private/sentiment-analysis/SentiCrypto/credentials.yaml"
-)
-
-print(config)
