@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: secr
+Version: 0.0.1
+Summary: Cryptocurrency Sentiment Analysis
+Home-page: https://github.com/mpecovnik/SentiCrypto
+Author: Matic Pečovnik
+Author-email: matic.pecovnik@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.8
+Provides-Extra: DEV

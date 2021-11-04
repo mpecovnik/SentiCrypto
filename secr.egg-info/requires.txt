@@ -1,0 +1,15 @@
+numpy
+pandas
+pydantic
+requests
+tqdm
+graphviz
+plotly
+
+[DEV]
+black
+pytest
+pytest-asyncio
+pytest-cov
+pytest-mock
+pytest-ordering

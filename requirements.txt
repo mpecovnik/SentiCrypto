@@ -1,0 +1,7 @@
+numpy
+pandas
+pydantic
+requests
+tqdm
+graphviz
+plotly
