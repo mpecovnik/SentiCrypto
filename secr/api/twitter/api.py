@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional
 from secr.api.apicaller import ApiCaller
 from secr.api.twitter.config import TwitterApiConfig
 from secr.api.twitter.saver import TwitterParquetSaver
+from tqdm import tqdm
 
 
 class TwitterQuery:
@@ -28,10 +29,12 @@ class TwitterApi(ApiCaller):
 
         headers = {"Authorization": "Bearer {}".format(self.config.bearer_token)}
 
-        max_results = 10
+        max_results = 100
         query_params["max_results"] = max_results
 
-        for _ in range(num_tweets // max_results):
+        for _ in tqdm(
+            range(num_tweets // max_results), total=num_tweets // max_results
+        ):
 
             json_response = super().call(url, query_params, headers)
             query_params["next_token"] = json_response["meta"]["next_token"]
