@@ -58,4 +58,4 @@ twitter_query = TwitterQuery("CRO", "en")
 query_params = twitter_query.get_query_params()
 
 
-twitter_api.call(search_url, query_params, num_tweets=100)
+twitter_api.call(search_url, query_params, num_tweets=10000)
