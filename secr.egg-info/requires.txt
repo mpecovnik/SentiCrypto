@@ -1,10 +1,10 @@
+graphviz
 numpy
 pandas
+plotly
 pydantic
 requests
 tqdm
-graphviz
-plotly
 
 [DEV]
 black
