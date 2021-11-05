@@ -13,7 +13,7 @@ class TwitterQuery:
 
     def get_query_params(self, next_token: Optional[str] = None) -> Dict[str, str]:
         return {
-            "query": f"#{self.hashtag} lang:{self.language} -is:retweet",
+            "query": f"#{self.hashtag} lang:{self.language} -is:retweet -is:reply -is:quote",
             "tweet.fields": "id,text,created_at,public_metrics",
             "next_token": next_token if next_token is not None else {},
         }
@@ -29,7 +29,7 @@ class TwitterApi(ApiCaller):
 
         headers = {"Authorization": "Bearer {}".format(self.config.bearer_token)}
 
-        max_results = 100
+        max_results = 100 if 100 < num_tweets else num_tweets
         query_params["max_results"] = max_results
 
         for _ in tqdm(
@@ -37,14 +37,17 @@ class TwitterApi(ApiCaller):
         ):
 
             json_response = super().call(url, query_params, headers)
-            query_params["next_token"] = json_response["meta"]["next_token"]
-
             data = json_response["data"]
-
             self.saver.save_dataframe(data)
 
+            try:
+                query_params["next_token"] = json_response["meta"]["next_token"]
+            except KeyError:
+                # means no next-token is available, therefore all tweets are exhausted
+                break
 
-coin = "SHIB"
+
+coin = "AMP"
 
 config = TwitterApiConfig.from_yaml(
     "/home/mpecovnik/Private/sentiment-analysis/SentiCrypto/credentials.yaml"
@@ -63,4 +66,4 @@ twitter_query = TwitterQuery(coin, "en")
 query_params = twitter_query.get_query_params()
 
 
-twitter_api.call(search_url, query_params, num_tweets=10000)
+twitter_api.call(search_url, query_params, num_tweets=5000)
