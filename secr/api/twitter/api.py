@@ -15,12 +15,23 @@ class TwitterQuery:
         self.since_id = since_id
 
     def get_query_params(self, next_token: Optional[str] = None) -> Dict[str, str]:
-        return {
-            "query": f"#{self.hashtag} lang:{self.language} -is:retweet -is:reply -is:quote",
-            "tweet.fields": "id,text,created_at,public_metrics",
+
+        default_query = """
+            -\"blue badge\" -blocked -suspended
+            -from:TwitterAPI -from:TwitterDev -from:AdsAPI -@TwitterSupport -@verified
+            -is:retweet -is:reply -is:quote
+        """
+
+        query_params = {
+            "query": f"#{self.hashtag} lang:{self.language} {default_query}",
+            "tweet.fields": "id,text,created_at,public_metrics,source,entities",
             "next_token": next_token if next_token is not None else {},
-            "since_id": self.since_id if self.since_id is not None else 0,
         }
+
+        if self.since_id is not None:
+            query_params["since_id"] = self.since_id
+
+        return query_params
 
 
 class TwitterApi(ApiCaller):
