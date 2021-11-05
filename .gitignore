@@ -1,3 +1,3 @@
 credentials.yaml
-*.ipynb
+*.ipynb_checkpoints
 *.pyc
