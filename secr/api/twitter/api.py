@@ -7,15 +7,19 @@ from tqdm import tqdm
 
 
 class TwitterQuery:
-    def __init__(self, hashtag: str, language: str) -> None:
+    def __init__(
+        self, hashtag: str, language: str, since_id: Optional[str] = None
+    ) -> None:
         self.hashtag = hashtag
         self.language = language
+        self.since_id = since_id
 
     def get_query_params(self, next_token: Optional[str] = None) -> Dict[str, str]:
         return {
             "query": f"#{self.hashtag} lang:{self.language} -is:retweet -is:reply -is:quote",
             "tweet.fields": "id,text,created_at,public_metrics",
             "next_token": next_token if next_token is not None else {},
+            "since_id": self.since_id if self.since_id is not None else 0,
         }
 
 
@@ -45,25 +49,3 @@ class TwitterApi(ApiCaller):
             except KeyError:
                 # means no next-token is available, therefore all tweets are exhausted
                 break
-
-
-coin = "AMP"
-
-config = TwitterApiConfig.from_yaml(
-    "/home/mpecovnik/Private/sentiment-analysis/SentiCrypto/credentials.yaml"
-)
-
-saver = TwitterParquetSaver(
-    f"/home/mpecovnik/Private/sentiment-analysis/data/twitter/{coin}"
-)
-
-twitter_api = TwitterApi(config, saver)
-
-search_url = "https://api.twitter.com/2/tweets/search/recent"  # Change to the endpoint you want to collect data from
-
-# change params based on the endpoint you are using
-twitter_query = TwitterQuery(coin, "en")
-query_params = twitter_query.get_query_params()
-
-
-twitter_api.call(search_url, query_params, num_tweets=5000)
