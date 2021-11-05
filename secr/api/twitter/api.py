@@ -13,7 +13,7 @@ class TwitterQuery:
 
     def get_query_params(self, next_token: Optional[str] = None) -> Dict[str, str]:
         return {
-            "query": f"#{self.hashtag} lang:{self.language}",
+            "query": f"#{self.hashtag} lang:{self.language} -is:retweet",
             "tweet.fields": "id,text,created_at,public_metrics",
             "next_token": next_token if next_token is not None else {},
         }
@@ -44,12 +44,14 @@ class TwitterApi(ApiCaller):
             self.saver.save_dataframe(data)
 
 
+coin = "SHIB"
+
 config = TwitterApiConfig.from_yaml(
     "/home/mpecovnik/Private/sentiment-analysis/SentiCrypto/credentials.yaml"
 )
 
 saver = TwitterParquetSaver(
-    "/home/mpecovnik/Private/sentiment-analysis/data/twitter/CRO"
+    f"/home/mpecovnik/Private/sentiment-analysis/data/twitter/{coin}"
 )
 
 twitter_api = TwitterApi(config, saver)
@@ -57,7 +59,7 @@ twitter_api = TwitterApi(config, saver)
 search_url = "https://api.twitter.com/2/tweets/search/recent"  # Change to the endpoint you want to collect data from
 
 # change params based on the endpoint you are using
-twitter_query = TwitterQuery("CRO", "en")
+twitter_query = TwitterQuery(coin, "en")
 query_params = twitter_query.get_query_params()
 
 
